@@ -1,1 +1,1 @@
-# cw2backend
+This is the backend for the web app created in coureswork 1
