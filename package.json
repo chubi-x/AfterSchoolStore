@@ -1,0 +1,19 @@
+{
+  "name": "cw2backend",
+  "version": "1.0.0",
+  "description": "Backend of web app that lets students and their parents purchase after school activites",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chubi-x/cw2backend.git"
+  },
+  "author": "Chubiyojo Adejoh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chubi-x/cw2backend/issues"
+  },
+  "homepage": "https://github.com/chubi-x/cw2backend#readme"
+}
