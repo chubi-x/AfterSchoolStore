@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 
 //configure express
-app.use(express.json);
+app.use(express.json());
 //set the headers
 app.use((req,res,next)=>{
     res.setHeader("Access-Control-Allow-Origin","*")
@@ -13,17 +13,17 @@ app.use((req,res,next)=>{
 });
 
 //connect to mongo client
-const mongoClient = require("mongodb").mongoClient;
+const MongoClient = require("mongodb").MongoClient;
 //create database instance
 let db;
 //connect to the cluster
-mongoClient.connect("mongodb+srv://chubiXaX:Chubiyojo2120@cluster0.8mjq6.mongodb.net", (error,client)=>{
+MongoClient.connect("mongodb+srv://chubiXaX:Chubiyojo2120@cluster0.8mjq6.mongodb.net", (error,client)=>{
     //connect to the database
     db = client.db("cst3145");
 });
 
 //make the collection name a parameter
-app.param("CollectionName",(req,res,next,collectionName)=>{
+app.param("collectionName",(req,res,next,collectionName)=>{
     req.collection = db.collection(collectionName);
     console.log("collection name:", req.collecion);
     return next();
@@ -36,6 +36,15 @@ app.get("/:collectionName",(req,res,next)=>{
         res.send(result);
     })
 });
+
+//middleware to post items to collection
+app.post("/:collectionName", (req,res,next)=>{
+    req.collection.insert(req.body,(err,result)=>{
+        if(e) return next(e);
+        res.send(result.ops);
+    }
+    );
+})
 
 //define a port
 const port = process.env.PORT || 3000;
