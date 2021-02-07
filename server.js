@@ -40,7 +40,7 @@ app.get("/:collectionName",(req,res,next)=>{
 //middleware to post items to collection
 app.post("/:collectionName", (req,res,next)=>{
     req.collection.insert(req.body,(err,result)=>{
-        if(e) return next(e);
+        if(err) return next(err);
         res.send(result.ops);
     }
     );

@@ -10,7 +10,8 @@
     <!-- google fonts link -->
     <link href="https://fonts.googleapis.com/css2?family=ABeeZee&display=swap" rel="stylesheet">
     <!-- bootstrap css -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <!-- local style -->
     <link rel="stylesheet" href="style.css">
     <title>Coursework 1</title>
@@ -22,9 +23,11 @@
         <!-- navbar -->
         <nav class="navbar navbar-light bg-light">
             <span class="navbar-brand mb-0 h1" v-if="showLessons">Lesson Store</span>
-            <span class="navbar-brand mb-0 h1" v-else-if="!showLessons" v-on:click="showCart" style="cursor:pointer">Lesson Store</span>
+            <span class="navbar-brand mb-0 h1" v-else-if="!showLessons" v-on:click="showCart"
+                style="cursor:pointer">Lesson Store</span>
             <!-- cart button -->
-            <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="showCart" v-if="cartIsNotEmpty() &&showLessons">cart</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="showCart"
+                v-if="cartIsNotEmpty() &&showLessons">cart</button>
         </nav>
 
         <main>
@@ -34,38 +37,38 @@
                 <section class="sort">
                     <p>Sort by:</p>
                     <div class="label">
-                      <label for="subject">
-                        Subject
-                        <input type="radio" name="subject" value="subject" v-model="sortType">
-                      </label>
+                        <label for="subject">
+                            Subject
+                            <input type="radio" name="subject" value="subject" v-model="sortType">
+                        </label>
                     </div>
                     <div class="label">
-                            <label for="location">
-                                Location
-                                <input type="radio" name="location" value="location" id="" v-model="sortType">
-                            </label>
-                        </div>    
-                        <div class="label">
-                            <label for="price">
-                                Price 
-                                <input type="radio" name="price" value="price" id="" v-model="sortType">
-                            </label>    
-                        </div>
-                        <div class="label">
-                            <label for="spaces">
-                                Spaces
-                                <input type="radio" name="spaces" value="spaces" id="" v-model="sortType">
-                            </label>    
-                        </div>
-                        <br>
-                        <label for="ascending">
-                            Ascending Order
-                            <input type="radio" name="ascending" value="ascending" v-model="sortBy">
+                        <label for="location">
+                            Location
+                            <input type="radio" name="location" value="location" id="" v-model="sortType">
                         </label>
-                        <label for="descending">
-                            Descending Order
-                            <input type="radio" name="descending" value="descending" v-model="sortBy">
+                    </div>
+                    <div class="label">
+                        <label for="price">
+                            Price
+                            <input type="radio" name="price" value="price" id="" v-model="sortType">
                         </label>
+                    </div>
+                    <div class="label">
+                        <label for="spaces">
+                            Spaces
+                            <input type="radio" name="spaces" value="spaces" id="" v-model="sortType">
+                        </label>
+                    </div>
+                    <br>
+                    <label for="ascending">
+                        Ascending Order
+                        <input type="radio" name="ascending" value="ascending" v-model="sortBy">
+                    </label>
+                    <label for="descending">
+                        Descending Order
+                        <input type="radio" name="descending" value="descending" v-model="sortBy">
+                    </label>
                 </section>
                 <!-- lessons container -->
                 <div class="container">
@@ -88,7 +91,8 @@
                                     <button class="btn btn-primary" disabled="disabled" v-else>Add to cart</button>
                                     <br>
                                     <!-- space information  countdown -->
-                                    <span class="spaces-left" v-if="lesson.spaces === cartCount(lesson.id)">All out!</span>
+                                    <span class="spaces-left" v-if="lesson.spaces === cartCount(lesson.id)">All
+                                        out!</span>
                                     <span class="spaces-left" v-else-if="lesson.spaces - cartCount(lesson.id) <=5">Only
                                         {{lesson.spaces - cartCount(lesson.id)}} spaces
                                         left !</span>
@@ -141,7 +145,7 @@
         let app = new Vue({
             el: "#app",
             data: {
-                lessons: lessons,
+                lessons: [],
                 sortType: "",
                 sortBy: "",
                 showLessons: true,
@@ -152,88 +156,102 @@
                     phone: ""
                 }
             },
-            methods: {
-                addToCart(lesson) {
+            created: {
+                function () {
+                    console.log("retrieving information from the server...");
+                    fetch("http://localhost:4000/lessons").then(
+                        function(res){
+                            res.json().then(
+                               function(json) {
+                                app.lessons = json;
+                                console.log(json);
+                               }
+                            )
+                        }
+                    )
+                },
 
-                    this.cart.push(lesson);
-                },
-                canAddToCart(lesson) {
-                    return lesson.spaces > this.cartCount(lesson.id);
-                },
-                cartIsNotEmpty() {
-                    return this.cart.length > 0;
-                },
-                cartCount(id) {
-                    let count = 0;
-                    for (let i = 0; i < this.cart.length; i++) {
-                        if (this.cart[i].id === id) {
-                            count++
-                        }
-                    }
-                    return count;
-                },
-                showCart() {
-                    this.showLessons = this.showLessons ? false : true
-                    if(showLessons){
-                        this.cartButton = this.cartButton ?"Lessons":"cart";
-                    }
-                },
-                removeItem(index) {
-                    this.cart.splice(index, 1);
-                },
-                isLetter(event) {
-                    let char = String.fromCharCode(event.keyCode); // Get the character
-                    if (/^[A-Za-z*\s]+$/.test(char)){
-                        return true; // Match with regex 
-                    }
-                    else event.preventDefault(); // If not match, don't add to input text
-                },
-                submitOrder() {
-                    alert("Order Submitted!");
-                },
-                validOrder() {
-                    return this.checkout.name && this.checkout.phone
-                }
-            },
-            computed: {
-                sortedLessons() {
-                    let lessonsArray = this.lessons.slice(0);
-                    let sortValue = this.sortType;
-                    let sortBy = this.sortBy;
-                    function compare(a, b) {
-                        if (sortBy == "ascending") {
-                            if (a[sortValue] > b[sortValue])
-                                return 1;
-                            if (a[sortValue] < b[sortValue])
-                                return -1;
-                            return 0;
-                        }
-                        else if (sortBy == "descending") {
-                            if (a[sortValue] < b[sortValue])
-                                return 1;
-                            if (a[sortValue] > b[sortValue])
-                                return -1;
-                            return 0;
-                        }
-                    }
-                    return lessonsArray.sort(compare);
-                }
-            },
+                methods: {
+                    addToCart(lesson) {
 
+                        this.cart.push(lesson);
+                    },
+                    canAddToCart(lesson) {
+                        return lesson.spaces > this.cartCount(lesson.id);
+                    },
+                    cartIsNotEmpty() {
+                        return this.cart.length > 0;
+                    },
+                    cartCount(id) {
+                        let count = 0;
+                        for (let i = 0; i < this.cart.length; i++) {
+                            if (this.cart[i].id === id) {
+                                count++
+                            }
+                        }
+                        return count;
+                    },
+                    showCart() {
+                        this.showLessons = this.showLessons ? false : true
+                        if (showLessons) {
+                            this.cartButton = this.cartButton ? "Lessons" : "cart";
+                        }
+                    },
+                    removeItem(index) {
+                        this.cart.splice(index, 1);
+                    },
+                    isLetter(event) {
+                        let char = String.fromCharCode(event.keyCode); // Get the character
+                        if (/^[A-Za-z*\s]+$/.test(char)) {
+                            return true; // Match with regex 
+                        } else event.preventDefault(); // If not match, don't add to input text
+                    },
+                    submitOrder() {
+                        alert("Order Submitted!");
+                    },
+                    validOrder() {
+                        return this.checkout.name && this.checkout.phone
+                    }
+                },
+                computed: {
+                    sortedLessons() {
+                        let lessonsArray = this.lessons.slice(0);
+                        let sortValue = this.sortType;
+                        let sortBy = this.sortBy;
+
+                        function compare(a, b) {
+                            if (sortBy == "ascending") {
+                                if (a[sortValue] > b[sortValue])
+                                    return 1;
+                                if (a[sortValue] < b[sortValue])
+                                    return -1;
+                                return 0;
+                            } else if (sortBy == "descending") {
+                                if (a[sortValue] < b[sortValue])
+                                    return 1;
+                                if (a[sortValue] > b[sortValue])
+                                    return -1;
+                                return 0;
+                            }
+                        }
+                        return lessonsArray.sort(compare);
+                    }
+                },
+            }
         })
     </script>
     <!-- jquery  -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-        <!-- popper js -->
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <!-- popper js -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-        crossorigin="anonymous"></script>
-        <!-- bootstrap js -->
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+    </script>
+    <!-- bootstrap js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
-        integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
-        crossorigin="anonymous"></script>
+        integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>
