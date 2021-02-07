@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/397b00c9d6.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue"></script>
-    <script src="lessons.js"></script>
+    <!-- <script src="lessons.js"></script> -->
     <!-- google fonts link -->
     <link href="https://fonts.googleapis.com/css2?family=ABeeZee&display=swap" rel="stylesheet">
     <!-- bootstrap css -->
@@ -156,89 +156,86 @@
                     phone: ""
                 }
             },
-            created: {
-                function () {
-                    console.log("retrieving information from the server...");
-                    fetch("http://localhost:4000/lessons").then(
-                        function(res){
-                            res.json().then(
-                               function(json) {
+            created: function () {
+                console.log("retrieving information from the server...");
+                fetch("http://localhost:3000/lessons").then(
+                    function (res) {
+                        res.json().then(
+                            function (json) {
                                 app.lessons = json;
                                 console.log(json);
-                               }
-                            )
-                        }
-                    )
-                },
-
-                methods: {
-                    addToCart(lesson) {
-
-                        this.cart.push(lesson);
-                    },
-                    canAddToCart(lesson) {
-                        return lesson.spaces > this.cartCount(lesson.id);
-                    },
-                    cartIsNotEmpty() {
-                        return this.cart.length > 0;
-                    },
-                    cartCount(id) {
-                        let count = 0;
-                        for (let i = 0; i < this.cart.length; i++) {
-                            if (this.cart[i].id === id) {
-                                count++
                             }
+                        )
+                    }
+                )
+            },
+            methods: {
+                addToCart(lesson) {
+
+                    this.cart.push(lesson);
+                },
+                canAddToCart(lesson) {
+                    return lesson.spaces > this.cartCount(lesson.id);
+                },
+                cartIsNotEmpty() {
+                    return this.cart.length > 0;
+                },
+                cartCount(id) {
+                    let count = 0;
+                    for (let i = 0; i < this.cart.length; i++) {
+                        if (this.cart[i].id === id) {
+                            count++
                         }
-                        return count;
-                    },
-                    showCart() {
-                        this.showLessons = this.showLessons ? false : true
-                        if (showLessons) {
-                            this.cartButton = this.cartButton ? "Lessons" : "cart";
-                        }
-                    },
-                    removeItem(index) {
-                        this.cart.splice(index, 1);
-                    },
-                    isLetter(event) {
-                        let char = String.fromCharCode(event.keyCode); // Get the character
-                        if (/^[A-Za-z*\s]+$/.test(char)) {
-                            return true; // Match with regex 
-                        } else event.preventDefault(); // If not match, don't add to input text
-                    },
-                    submitOrder() {
-                        alert("Order Submitted!");
-                    },
-                    validOrder() {
-                        return this.checkout.name && this.checkout.phone
+                    }
+                    return count;
+                },
+                showCart() {
+                    this.showLessons = this.showLessons ? false : true
+                    if (showLessons) {
+                        this.cartButton = this.cartButton ? "Lessons" : "cart";
                     }
                 },
-                computed: {
-                    sortedLessons() {
-                        let lessonsArray = this.lessons.slice(0);
-                        let sortValue = this.sortType;
-                        let sortBy = this.sortBy;
-
-                        function compare(a, b) {
-                            if (sortBy == "ascending") {
-                                if (a[sortValue] > b[sortValue])
-                                    return 1;
-                                if (a[sortValue] < b[sortValue])
-                                    return -1;
-                                return 0;
-                            } else if (sortBy == "descending") {
-                                if (a[sortValue] < b[sortValue])
-                                    return 1;
-                                if (a[sortValue] > b[sortValue])
-                                    return -1;
-                                return 0;
-                            }
-                        }
-                        return lessonsArray.sort(compare);
-                    }
+                removeItem(index) {
+                    this.cart.splice(index, 1);
                 },
-            }
-        })
+                isLetter(event) {
+                    let char = String.fromCharCode(event.keyCode); // Get the character
+                    if (/^[A-Za-z*\s]+$/.test(char)) {
+                        return true; // Match with regex 
+                    } else event.preventDefault(); // If not match, don't add to input text
+                },
+                submitOrder() {
+                    alert("Order Submitted!");
+                },
+                validOrder() {
+                    return this.checkout.name && this.checkout.phone
+                }
+            },
+            computed: {
+                sortedLessons() {
+                    let lessonsArray = this.lessons.slice(0);
+                    let sortValue = this.sortType;
+                    let sortBy = this.sortBy;
+
+                    function compare(a, b) {
+                        if (sortBy == "ascending") {
+                            if (a[sortValue] > b[sortValue])
+                                return 1;
+                            if (a[sortValue] < b[sortValue])
+                                return -1;
+                            return 0;
+                        } else if (sortBy == "descending") {
+                            if (a[sortValue] < b[sortValue])
+                                return 1;
+                            if (a[sortValue] > b[sortValue])
+                                return -1;
+                            return 0;
+                        }
+                    }
+                    return lessonsArray.sort(compare);
+                }
+            },
+        });
     </script>
     <!-- jquery  -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
