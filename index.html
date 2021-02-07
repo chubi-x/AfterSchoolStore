@@ -132,10 +132,10 @@
                 <div class="checkout-page">
                     <h1>Checkout</h1>
                     <!-- checkout form -->
-                    <form>
+                    <form action="http://localhost:3000/orders" method="POST">
                         <input type="text " required v-model="checkout.name" v-on:keypress="isLetter($event)">
                         <input type="number" required v-model="checkout.phone">
-                        <button v-on:click="submitOrder()" v-if="validOrder()" class="btn btn-success">Checkout</button>
+                        <button type="submit" v-on:click="submitOrder()" v-if="validOrder()" class="btn btn-success">Checkout</button>
                     </form>
                 </div>
             </div>
