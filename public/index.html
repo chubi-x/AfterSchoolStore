@@ -27,7 +27,7 @@
                 style="cursor:pointer">Lesson Store</span>
             <!-- cart button -->
             <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="showCart"
-                v-if="cartIsNotEmpty() &&showLessons">cart</button>
+                v-if="cartIsNotEmpty() && showLessons">cart</button>
         </nav>
 
         <main>
@@ -132,10 +132,12 @@
                 <div class="checkout-page">
                     <h1>Checkout</h1>
                     <!-- checkout form -->
-                    <form action="https://cw2backend.herokuapp.com/orders" method="POST">
+                    <form v-on:submit.prevent="submitOrder">
                         <input type="text " required v-model="checkout.name" v-on:keypress="isLetter($event)">
                         <input type="number" required v-model="checkout.phone">
-                        <button type=   "submit" v-on:click="submitOrder()" v-if="validOrder()" class="btn btn-success">Checkout</button>
+                        <button type="submit" v-if="validOrder()"
+                            class="btn btn-success">Checkout</button>
+
                     </form>
                 </div>
             </div>
@@ -163,7 +165,6 @@
                         res.json().then(
                             function (json) {
                                 app.lessons = json;
-                                console.log(json);
                             }
                         )
                     }
@@ -205,7 +206,24 @@
                     } else event.preventDefault(); // If not match, don't add to input text
                 },
                 submitOrder() {
-                    alert("Order Submitted!");
+                    fetch('https://cw2backend.herokuapp.com/orders', {
+                            method: 'POST', // set the HTTP method as 'POST'
+                            headers: {
+                                'Content-Type': 'application/json', // set the data type as JSON
+                            },
+                            mode: "cors",
+                            cache: "no-store",
+                            body: JSON.stringify(app.checkout), // need to stringify the JSON object
+                        })
+                        .then(response => response.json())
+                        .then(responseJSON => { 
+                            document.getElementById('response').innerText = JSON.stringify(responseJSON);
+                        })
+                        .catch((error) => {
+                            alert(error);
+                            console.log(error);
+                            // document.getElementById('error').innerText = error;
+                        });
                 },
                 validOrder() {
                     return this.checkout.name && this.checkout.phone
