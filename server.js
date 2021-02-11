@@ -25,8 +25,12 @@ MongoClient.connect("mongodb+srv://chubiXaX:Chubiyojo2120@cluster0.8mjq6.mongodb
 //make the collection name a parameter
 app.param("collectionName",(req,res,next,collectionName)=>{
     req.collection = db.collection(collectionName);
-    console.log("collection name:", req.collecion);
+    console.log("collection name:", req.collection);
     return next();
+});
+
+app.get("/", (req, res, next) => {
+    res.send("Select a collection, e.g /collection/messages");
 });
 
 // middleware to get all items in a collection
