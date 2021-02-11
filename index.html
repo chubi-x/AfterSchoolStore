@@ -132,10 +132,10 @@
                 <div class="checkout-page">
                     <h1>Checkout</h1>
                     <!-- checkout form -->
-                    <form action="http://localhost:3000/orders" method="POST">
+                    <form action="https://cw2backend.herokuapp.com/orders" method="POST">
                         <input type="text " required v-model="checkout.name" v-on:keypress="isLetter($event)">
                         <input type="number" required v-model="checkout.phone">
-                        <button type="submit" v-on:click="submitOrder()" v-if="validOrder()" class="btn btn-success">Checkout</button>
+                        <button type=   "submit" v-on:click="submitOrder()" v-if="validOrder()" class="btn btn-success">Checkout</button>
                     </form>
                 </div>
             </div>
@@ -158,7 +158,7 @@
             },
             created: function () {
                 console.log("retrieving information from the server...");
-                fetch("http://localhost:3000/lessons").then(
+                fetch("https://cw2backend.herokuapp.com/lessons").then(
                     function (res) {
                         res.json().then(
                             function (json) {

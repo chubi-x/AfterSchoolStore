@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "..\\..\\..\\group lab 2"
+		},
+		{
+			"path": "..\\..\\..\\..\\web app backend sample\\backendSample"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "cw2backend"
+	}
+}
