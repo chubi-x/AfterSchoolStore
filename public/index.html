@@ -155,7 +155,7 @@
                 cart: [],
                 checkout: {
                     name: "",
-                    phone: ""
+                    phone: 0
                 }
             },
             created: function () {
@@ -217,10 +217,8 @@
                         })
                         .then(response => response.json())
                         .then(responseJSON => { 
-                            document.getElementById('response').innerText = JSON.stringify(responseJSON);
                         })
                         .catch((error) => {
-                            alert(error);
                             console.log(error);
                             // document.getElementById('error').innerText = error;
                         });
