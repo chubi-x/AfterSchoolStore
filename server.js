@@ -5,6 +5,8 @@ const app = express();
 
 //configure express
 app.use(express.json());
+//specify where to get static files
+app.use(express.static('public'));
 //set the headers
 app.use((req,res,next)=>{
     res.setHeader("Access-Control-Allow-Origin","*")
@@ -30,7 +32,8 @@ app.param("collectionName",(req,res,next,collectionName)=>{
 });
 
 app.get("/", (req, res, next) => {
-    res.send("Select a collection, e.g /collection/messages");
+    res.render("index.html");
+    next();
 });
 
 // middleware to get all items in a collection
