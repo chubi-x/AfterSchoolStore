@@ -155,7 +155,7 @@
                 cart: [],
                 checkout: {
                     name: "",
-                    phone: 0
+                    phone: ""
                 }
             },
             created: function () {
@@ -211,7 +211,7 @@
                             headers: {
                                 'Content-Type': 'application/json', // set the data type as JSON
                             },
-                            mode: "cors",
+                            // mode: "cors",
                             cache: "no-store",
                             body: JSON.stringify(app.checkout), // need to stringify the JSON object
                         })
@@ -220,7 +220,6 @@
                         })
                         .catch((error) => {
                             console.log(error);
-                            // document.getElementById('error').innerText = error;
                         });
                 },
                 validOrder() {
