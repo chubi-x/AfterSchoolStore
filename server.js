@@ -28,10 +28,7 @@ app.param("collectionName",(req,res,next,collectionName)=>{
     console.log("collection name:", req.collecion);
     return next();
 });
-app.get("/",(req,res,next)=>{
-    res.sendFile("index.html");
-    next();
-})
+
 // middleware to get all items in a collection
 app.get("/:collectionName",(req,res,next)=>{
     req.collection.find({}).toArray((e,result)=>{
