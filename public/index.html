@@ -14,7 +14,7 @@
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <!-- local style -->
     <link rel="stylesheet" href="style.css">
-    <title>Coursework 1</title>
+    <title>Coursework 2</title>
 </head>
 
 <body>
@@ -236,8 +236,6 @@
                             }
                         };
                     });
-                    //clear cart
-                    // this.cart.length=0;
 
                     fetch('https://cw2backend.herokuapp.com/orders', {
                             method: 'POST', // set the HTTP method as 'POST'
@@ -254,8 +252,8 @@
                             console.log(error);
                         });
                     if (this.cartIsNotEmpty()) alert("Order Submitted Successfully!");
-                    //reload the page
-                    // location.reload();
+                    //clear cart
+                    this.cart.length=0;
 
                 },
                 validOrder() {
