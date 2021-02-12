@@ -50,7 +50,6 @@ app.post("/:collectionName", (req, res, next) => {
     req.collection.insert(req.body, (err, result) => {
         if (err) return next(err);
         res.send(result.ops);
-        console.log(req.body);
     });
 })
 //middleware to retrieve items by object ID
@@ -65,25 +64,25 @@ app.get("/:collectionName/:id", (req, res, next) => {
 });
 
 //middleware to update items in collection
-app.put("/:collectionName/:id", (req, res, next) => {
-    req.collection.update({
-            _id: new ObjectID(req.params.id)
-        }, {
-            $set: req.body
-        }, {
-            safe: true,
-            multi: false
-        },
-        (e, result) => {
-            if (e) return next(e);
-            res.send((result.result.n === 1 ? {
-                msg: "success"
-            } : {
-                msg: "error"
-            }))
-        }
-    )
-})
+// app.put("/:collectionName/:id", (req, res, next) => {
+//     req.collection.update({
+//             _id: new ObjectID(req.params.id)
+//         }, {
+//             $set: req.body
+//         }, {
+//             safe: true,
+//             multi: false
+//         },
+//         (e, result) => {
+//             if (e) return next(e);
+//             res.send((result.result.n === 1 ? {
+//                 msg: "success"
+//             } : {
+//                 msg: "error"
+//             }))
+//         }
+//     )
+// })
 
 //define a port
 const port = process.env.PORT || 3000;
