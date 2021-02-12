@@ -91,10 +91,10 @@
                                     <button class="btn btn-primary" disabled="disabled" v-else>Add to cart</button>
                                     <br>
                                     <!-- space information  countdown -->
-                                    <span class="spaces-left" v-if="lesson.spaces === cartCount(lesson.id)">All
+                                    <span class="spaces-left" v-if="lesson.spaces === 0">All
                                         out!</span>
-                                    <span class="spaces-left" v-else-if="lesson.spaces - cartCount(lesson.id) <=5">Only
-                                        {{lesson.spaces - cartCount(lesson.id)}} spaces
+                                    <span class="spaces-left" v-else-if="lesson.spaces - cartCount(lesson._id) <=5">Only
+                                        {{lesson.spaces}} spaces
                                         left !</span>
                                     <span v-else>Buy now!</span>
                                 </div>
@@ -133,10 +133,10 @@
                     <h1>Checkout</h1>
                     <!-- checkout form -->
                     <form v-on:submit.prevent="submitOrder">
-                        <input type="text " required v-model="checkout.name" v-on:keypress="isLetter($event)">
-                        <input type="number" required v-model="checkout.phone">
-                        <button type="submit" v-if="validOrder()"
-                            class="btn btn-success">Checkout</button>
+                        <input type="text " required v-model="checkout.name" placeholder="Name"
+                            v-on:keypress="isLetter($event)">
+                        <input type="number" required v-model="checkout.phone" placeholder="Phone">
+                        <button type="submit" v-if="validOrder()" class="btn btn-success">Checkout</button>
 
                     </form>
                 </div>
@@ -155,7 +155,11 @@
                 cart: [],
                 checkout: {
                     name: "",
-                    phone: ""
+                    phone: "",
+                    lessonIDs: [],
+                    spaces: {
+                        "": ""
+                    }
                 }
             },
             created: function () {
@@ -172,11 +176,11 @@
             },
             methods: {
                 addToCart(lesson) {
-
                     this.cart.push(lesson);
+                    // console.log(this.cart);
                 },
                 canAddToCart(lesson) {
-                    return lesson.spaces > this.cartCount(lesson.id);
+                    return lesson.spaces > this.cartCount(lesson._id);
                 },
                 cartIsNotEmpty() {
                     return this.cart.length > 0;
@@ -184,7 +188,7 @@
                 cartCount(id) {
                     let count = 0;
                     for (let i = 0; i < this.cart.length; i++) {
-                        if (this.cart[i].id === id) {
+                        if (this.cart[i]._id === id) {
                             count++
                         }
                     }
@@ -206,6 +210,33 @@
                     } else event.preventDefault(); // If not match, don't add to input text
                 },
                 submitOrder() {
+                    //for each lesson
+                    app.lessons.forEach(lesson => {
+                        //loop through cart
+                        for (let i = 0; i < this.cart.length; i++) {
+                            //check if lesson exists in the cart
+                            if (lesson._id == this.cart[i]._id) {
+                                //add the lesson id to the lessonsID array in checkout object
+                                app.checkout.lessonIDs.push(lesson._id);
+                                //loop through the spaces object to update checkout spaces
+                                for (var key in app.checkout.spaces) {
+                                    //make sure the actual object property is being retrieved
+                                    if (app.checkout.spaces.hasOwnProperty(key)) {
+                                        //set the key to the lesson id
+                                        key = lesson._id;
+                                        //set the value to the number of spaces
+                                        app.checkout.spaces[key] = this.cartCount(this.cart[i]._id);
+                                    }
+                                    break;
+                                }
+                                // console.log(app.checkout.spaces);
+                                //remove number of spaces in the cart from the number of spaces in the lesson
+                                if (lesson.spaces != 0) lesson.spaces -= this.cartCount(lesson._id);
+                                break;
+                            }
+                        };
+                    });
+
                     fetch('https://cw2backend.herokuapp.com/orders', {
                             method: 'POST', // set the HTTP method as 'POST'
                             headers: {
@@ -216,11 +247,13 @@
                             body: JSON.stringify(app.checkout), // need to stringify the JSON object
                         })
                         .then(response => response.json())
-                        .then(responseJSON => { 
-                        })
+                        .then(responseJSON => {})
                         .catch((error) => {
                             console.log(error);
                         });
+                    if (this.cartIsNotEmpty()) alert("Order Submitted Successfully!");
+                    else alert("cart is empty, add something to your cart!");
+
                 },
                 validOrder() {
                     return this.checkout.name && this.checkout.phone
