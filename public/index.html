@@ -236,6 +236,8 @@
                             }
                         };
                     });
+                    //clear cart
+                    this.cart.length=0;
 
                     fetch('https://cw2backend.herokuapp.com/orders', {
                             method: 'POST', // set the HTTP method as 'POST'
@@ -253,6 +255,8 @@
                         });
                     if (this.cartIsNotEmpty()) alert("Order Submitted Successfully!");
                     else alert("cart is empty, add something to your cart!");
+                    //reload the page
+                    location.reload();
 
                 },
                 validOrder() {
