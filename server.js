@@ -20,7 +20,7 @@ const MongoClient = require("mongodb").MongoClient;
 //create database instance
 let db;
 //connect to the cluster
-MongoClient.connect("mongodb+srv://chubiXaX:Chubiyojo2120@cluster0.8mjq6.mongodb.net", (error, client) => {
+MongoClient.connect("mongodb+srv://chubiXaX:Chubiyojo2120@cluster0.8mjq6.mongodb.net", {useUnifiedTopology:true},(error, client) => {
     //connect to the database
     db = client.db("cst3145");
 });
@@ -53,10 +53,10 @@ app.post("/:collectionName", (req, res, next) => {
     });
 })
 //middleware to retrieve items by object ID
-const ObjectID = require('mongodb').ObjectID;
-app.get("/:collectionName/:id", (req, res, next) => {
+// const ObjectID = require('mongodb').ObjectID;
+app.get("/:collectionName/:name", (req, res, next) => {
     req.collection.findOne({
-        _id: new ObjectID(req.params.id)
+        name: (req.params.name)
     }, (e, result) => {
         if (e) return next(e);
         res.send(result);
