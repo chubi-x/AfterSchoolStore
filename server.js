@@ -1,5 +1,5 @@
+//import express
 const express = require("express");
-
 //create express instance
 const app = express();
 
@@ -55,11 +55,11 @@ app.post("/:collectionName", (req, res, next) => {
 //middleware to retrieve items by object ID
 // const ObjectID = require('mongodb').ObjectID;
 app.get("/:collectionName/:name", (req, res, next) => {
-    req.collection.findOne({
+    req.collection.find({
         name: (req.params.name)
-    }, (e, result) => {
-        if (e) return next(e);
-        res.send(result);
+    }).toArray((e,result)=>{
+         if(e) return next(e);
+         res.send(result);
     })
 });
 
