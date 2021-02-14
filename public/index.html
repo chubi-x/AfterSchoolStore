@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- font awesome -->
     <script src="https://kit.fontawesome.com/397b00c9d6.js" crossorigin="anonymous"></script>
+    <!-- vue CDN -->
     <script src="https://unpkg.com/vue"></script>
     <!-- <script src="lessons.js"></script> -->
     <!-- google fonts link -->
@@ -74,7 +76,7 @@
                 <div class="container">
                     <div class="row">
                         <!-- lessons list -->
-                        <div class="lessons col" v-for="lesson in sortedLessons">
+                        <div class="lessons col-md-4" v-for="lesson in sortedLessons">
                             <div class="card" style="width: 18rem;">
                                 <!-- lesson image -->
                                 <img v-bind:src="lesson.image" alt="lesson image" class="card-img-top">
@@ -108,37 +110,69 @@
             </div>
             <!-- shopping cart page -->
             <div v-else>
-                <h1 class="cart-header">Shopping Cart</h1>
-                <!-- cart container -->
-                <div class="container">
-                    <div class="row">
-                        <!-- cart items list -->
-                        <div v-for="(cartItem,index) in cart" class="lessons">
-                            <div class="card" style="width: 18rem;">
-                                <img v-bind:src="cartItem.image" alt="lesson image" class="card-img-top">
-                                <div class="card-body">
-                                    <h1 class="card-title">Subject : {{cartItem.subject}}</h1>
-                                    <h1>Location : {{cartItem.location}}</h1>
-                                    <h1>Price : £{{cartItem.price}}</h1>
-                                    <h1>Spaces : {{cartItem.spaces}}</h1>
-                                    <!-- remove from cart button -->
-                                    <button type="button" class="btn btn-danger"
-                                        v-on:click="removeItem(cartItem)">Remove</button>
+                <!-- container to hold cart items and checkout form -->
+                <div class="row">
+                    <!-- cart items -->
+                    <div class="col-md-6">
+                        <!-- cart container -->
+                        <div class="container">
+                            <div class="row">
+                                <!-- cart items list -->
+                                <div v-for="(cartItem,index) in updatedCart" class="lessons col-md-6"
+                                    style=" margin-right: 0px;">
+                                    <div class="card" style="width: 18rem;">
+                                        <img v-bind:src="cartItem.image" alt="lesson image" class="card-img-top">
+                                        <div class="card-body">
+                                            <h1 class="card-title">Subject : {{cartItem.subject}}</h1>
+                                            <h1>Location : {{cartItem.location}}</h1>
+                                            <h1>Price : £{{cartItem.price}}</h1>
+                                            <div>
+                                                <!-- add to cart -->
+                                                <button class="btn" type="button" v-on:click="updateCart(cartItem)">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                                <span> {{cartCount(cartItem._id)}} </span>
+                                                <!-- remove from cart button -->
+                                                <button class="btn" type="button" v-on:click="removeItem(cartItem)">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="checkout-page">
-                    <h1>Checkout</h1>
                     <!-- checkout form -->
-                    <form v-on:submit.prevent="submitOrder">
-                        <input type="text " required v-model="checkout.name" placeholder="Name"
-                            v-on:keypress="isLetter($event)">
-                        <input type="number" required v-model="checkout.phone" placeholder="Phone">
-                        <button type="submit" v-if="validOrder()" class="btn btn-success">Checkout</button>
+                    <div class="col-md-5">
+                        <div class="checkout-page text-center">
+                            <h1>Checkout</h1>
+                            <button class="btn btn-sucess" v-on:click="seeOrders()">See your Orders</button>
+                            <!-- checkout form -->
+                            <form v-on:submit.prevent="submitOrder">
+                                <div id="order-alert" class="alert alert-success alert-dismissible" role="alert"
+                                    style="display: none;">
+                                    Order Successful!
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <!-- Name -->
+                                <div class="form-group">
+                                    <input class="form-control" type="text " required v-model="checkout.name"
+                                        placeholder="Name" v-on:keypress="isLetter($event)">
+                                </div>
+                                <!-- Phone -->
+                                <div class="form-group">
+                                    <input class="form-control" type="number" required v-model="checkout.phone"
+                                        placeholder="Phone">
 
-                    </form>
+                                </div>
+                                <button type="submit" v-if="validOrder()" class="btn btn-success">Checkout</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -154,13 +188,14 @@
                 cartButton: "cart",
                 cart: [],
                 checkout: {
-                    name: "",
-                    phone: "",
+                    name: null,
+                    phone: null,
                     lessonIDs: [],
                     spaces: {
                         "": ""
                     }
-                }
+                },
+                orders: []
             },
             created: function () {
                 console.log("retrieving information from the server...");
@@ -176,8 +211,7 @@
             },
             methods: {
                 addToCart(lesson) {
-                    this.cart.push(lesson);
-                    // console.log(this.cart);
+                    if (this.cart.indexOf(lesson) == -1) this.cart.push(lesson);
                 },
                 canAddToCart(lesson) {
                     return lesson.spaces > this.cartCount(lesson._id);
@@ -200,7 +234,12 @@
                         this.cartButton = this.cartButton ? "Lessons" : "cart";
                     }
                 },
+                updateCart(index) {
+                    if (this.canAddToCart(index)) this.cart.push(index);
+
+                },
                 removeItem(index) {
+                    index = this.cart.indexOf(index);
                     this.cart.splice(index, 1);
                 },
                 isLetter(event) {
@@ -211,53 +250,73 @@
                 },
                 submitOrder() {
                     //for each lesson
-                    app.lessons.forEach(lesson => {
-                        //loop through cart
-                        for (let i = 0; i < this.cart.length; i++) {
-                            //check if lesson exists in the cart
-                            if (lesson._id == this.cart[i]._id) {
-                                //add the lesson id to the lessonsID array in checkout object
-                                app.checkout.lessonIDs.push(lesson._id);
-                                //loop through the spaces object to update checkout spaces
-                                for (var key in app.checkout.spaces) {
-                                    //make sure the actual object property is being retrieved
-                                    if (app.checkout.spaces.hasOwnProperty(key)) {
-                                        //set the key to the lesson id
-                                        key = lesson._id;
-                                        //set the value to the number of spaces
-                                        app.checkout.spaces[key] = this.cartCount(this.cart[i]._id);
+                    //check if cart is empty
+                    if (this.cartIsNotEmpty()) {
+                        app.lessons.forEach(lesson => {
+                            //loop through cart
+                            for (let i = 0; i < this.cart.length; i++) {
+                                //check if lesson exists in the cart
+                                if (lesson._id == this.cart[i]._id) {
+                                    //add the lesson id to the lessonsID array in checkout object
+                                    app.checkout.lessonIDs.push(lesson._id);
+                                    //loop through the spaces object to update checkout spaces
+                                    for (var key in app.checkout.spaces) {
+                                        //make sure the actual object property is being retrieved
+                                        if (app.checkout.spaces.hasOwnProperty(key)) {
+                                            //set the key to the lesson id
+                                            key = lesson._id;
+                                            //set the value to the number of spaces
+                                            app.checkout.spaces[key] = this.cartCount(this.cart[i]._id);
+                                        }
+                                        break;
                                     }
+                                    // console.log(app.checkout.spaces);
+                                    //remove number of spaces in the cart from the number of spaces in the lesson
+                                    if (lesson.spaces != 0) lesson.spaces -= this.cartCount(lesson._id);
                                     break;
                                 }
-                                // console.log(app.checkout.spaces);
-                                //remove number of spaces in the cart from the number of spaces in the lesson
-                                if (lesson.spaces != 0) lesson.spaces -= this.cartCount(lesson._id);
-                                break;
-                            }
-                        };
-                    });
+                            };
 
-                    fetch('https://cw2backend.herokuapp.com/orders', {
-                            method: 'POST', // set the HTTP method as 'POST'
-                            headers: {
-                                'Content-Type': 'application/json', // set the data type as JSON
-                            },
-                            // mode: "cors",
-                            cache: "no-store",
-                            body: JSON.stringify(app.checkout), // need to stringify the JSON object
-                        })
-                        .then(response => response.json())
-                        .then(responseJSON => {})
-                        .catch((error) => {
-                            console.log(error);
+
+
                         });
-                    if (this.cartIsNotEmpty()) alert("Order Submitted Successfully!");
-                    //clear cart
-                    this.cart.length=0;
+                        //post checkout information to orders collection
+                        fetch('https://cw2backend.herokuapp.com/orders', {
+                                method: 'POST', // set the HTTP method as 'POST'
+                                headers: {
+                                    'Content-Type': 'application/json', // set the data type as JSON
+                                },
+                                // mode: "cors",
+                                cache: "no-store",
+                                body: JSON.stringify(app.checkout), // need to stringify the JSON object
+                            })
+                            .then(response => response.json())
+                            .then(responseJSON => {})
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                        // display an alert
+                        document.getElementById('order-alert').style.display = "block";
+                        //clear cart
+                        this.cart.length = 0;
+                    } else alert("Your cart is empty! add something.");
+
 
                 },
                 validOrder() {
                     return this.checkout.name && this.checkout.phone
+                },
+                seeOrders() {
+                    fetch(`http://localhost:3000/orders/${app.checkout.name}`).then(
+                        function (res) {
+                            res.json().then(
+                                function (json) {   
+                                    app.orders = json;
+                                    console.log(app.orders);
+                                }
+                            )
+                        }
+                    )
                 }
             },
             computed: {
@@ -282,6 +341,10 @@
                         }
                     }
                     return lessonsArray.sort(compare);
+                },
+                updatedCart() {
+                    let newCart = new Set(this.cart);
+                    return newCart;
                 }
             },
         });
