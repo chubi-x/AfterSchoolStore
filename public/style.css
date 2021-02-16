@@ -1,55 +1,228 @@
-body{
-    background-color: #ddcdfa;
+body {
+    background: url(images/wall.jpg) no-repeat center fixed;
+    background-size: cover;
 }
-#app{
-    font-family: 'ABeeZee', sans-serif;
+
+#app {
+    color: #eee6e6a6;
+    font-family: 'Permanent Marker', cursive;
+    font-weight: bold;
     text-align: center;
 }
-.navbar-brand{
+
+nav.navbar {
+    background-color: #2D1C2C;
+
+}
+
+.navbar-brand {
+    font-size: 30px;
     font-weight: bolder;
 }
-.sort{
+
+nav button.cart-btn {
+    color: #eee6e6a6;
+    border-color: #527abb;
+    /* Black see-through */
+
+}
+
+nav button.cart-btn:hover {
+    background-color: #527abb;
+
+}
+
+.sort {
     float: left;
     margin: 30px;
     width: 100px;
 }
-.sort p{
+
+.sort p {
     font-weight: bold;
 }
-.sort input[type="radio"]{
+
+.sort input[type="radio"] {
     vertical-align: middle;
     margin-top: -1px;
 }
-.lessons{
-    padding: 10px;
+
+.lessons {
+    background-color: transparent;
+    height: 270px;
+    margin-top: 20px;
+    border-radius: 14px;
+    perspective: 1000px;
 }
-.lessons .card{
-    -webkit-box-shadow: 15px 11px 41px -18px rgba(0,0,0,0.39);
-    -moz-box-shadow: 15px 11px 41px -18px rgba(0,0,0,0.39);
-    box-shadow: 15px 11px 41px -18px rgba(0,0,0,0.39);}
-.lessons  img{
+
+.lessons img {
+    border-radius: 14px;
     width: 100%;
-    height: 200px;
+    height: 100%;
     float: left;
 }
-.lessons h1{
-    font-size: 15px;
+
+.lessons h1 {
+    font-size: 18px;
+}
+
+.lessons .card {
+    border: 4px solid #2D1C2C;
+    border-radius: 14px;
+    position: relative;
+    height: 100%;
+    text-align: center;
+}
+
+.lessons .card-body {
+    border-radius: 14px;
+    background-color: #37B3C8;
+    padding: 0px;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background: rgb(0, 0, 0);
+    background: rgba(46, 12, 12, 0.712);
+    /* Black see-through */
+    color: #f1f1f1;
+    width: 100%;
+    transition: .5s ease;
+    opacity: 0;
+    /* color: white; */
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.lessons:hover .card-body {
+    opacity: 1;
+}
+
+.lessons .card-body h1.card-title {
+    text-align: left;
+    font-size: 20px;
     font-weight: 700;
+
 }
-.lessons .card-body{
-    background-color: #EAFACD;
-    padding: 10px;
-    height: 177px;
+
+.lessons .card-body button.btn.btn-primary {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    width: 100%;
 }
-.lessons .spaces-left{
-    font-size:12px;
+
+.lessons .card .add-to-cart {
+    background-color: #527abb;
+}
+
+.lessons .spaces-left {
+    font-size: 15px;
     font-weight: bold;
-    color: #1a51ab;
+    color: #527abb;
 }
-.cart-header{ 
-    margin-top:20px ;
-font-weight: bolder;
+
+.lessons .cart-buttons {
+    margin-top: 30px;
 }
-.checkout-page{
-    margin: 70px;
+
+.lessons .cart-buttons button.btn {
+    color: white;
+}
+
+div.cart-header {
+    margin-top: 20px;
+    font-weight: bolder;
+}
+
+div.cart figure.cart-img img {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+}
+
+div.cart div.cart-row {
+    border: 4px solid #2D1C2C;
+    border-radius: 14px;
+    padding: 20px;
+    margin: 0 auto;
+    margin-top: 20px;
+    background: rgba(46, 12, 12, 0.712);
+    /* Black see-through */
+
+}
+
+div.cart div.cart-row:hover {
+    -webkit-box-shadow: 24px 33px 71px -14px rgba(109,64,117,1);
+-moz-box-shadow: 24px 33px 71px -14px rgba(109,64,117,1);
+box-shadow: 24px 33px 71px -14px rgba(109,64,117,1);
+    transform: scale(1.1);
+    transition: 0.5s ease;
+}
+
+div.cart div.cart-row div:not(:nth-child(1)) {
+    font-size: 15px;
+    padding-top: 18px;
+}
+
+div.cart div.cart-buttons .btn {
+    color: #eee6e6a6;
+}
+
+.checkout-page {
+    width: 100%;
+    /* margin: 50px; */
+}
+
+
+div.cart div.cart-row .col-lg-2.col-md-2.col-sm-2 {
+    width: 100%;
+}
+
+section.button-group button.btn-success {
+    background-color: #dff5b5;
+    color: rgb(49, 70, 70);
+}
+
+/* media query */
+@media only screen and (min-width: 600px) {
+    .lessons {
+        /* padding-left: 70px; */
+    }
+
+    .lessons .card {
+        max-width: 350px;
+    }
+}
+
+@media only screen and (min-width:578px) {
+    div.cart div.cart-row div.cart-item-descriptions.col-lg-2.col-md-2.col-sm-2 {}
+
+}
+
+@media only screen and (min-width:770px) {
+    div.cart div.cart-row {
+        width: 50%;
+
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    div.cart div.cart-row {
+        width: 80%;
+        padding: 0px;
+    }
+
+    div.cart div.cart-row div:not(:nth-child(1)) {
+        font-size: 20px;
+        padding-top: 0px;
+    }
+
+    div.cart figure.cart-img img {
+        width: 90%;
+        height: auto;
+    }
 }
