@@ -54,7 +54,7 @@ app.post("/:collectionName", (req, res, next) => {
 })
 //middleware to retrieve items by object ID
 // const ObjectID = require('mongodb').ObjectID;
-app.get("/:collectionName/:name", (req, res, next) => {
+app.get("/:collectionName/:name/:phone", (req, res, next) => {
     req.collection.find({
         name: (req.params.name)
     }).toArray((e,result)=>{

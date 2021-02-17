@@ -375,7 +375,7 @@
                     return this.checkout.name && this.checkout.phone
                 },
                 seeOrders() {
-                    fetch(`https://cw2backend.herokuapp.com/orders/${app.checkout.name}`).then(
+                    fetch(`https://cw2backend.herokuapp.com/orders/${app.checkout.name}/${app.checkout.phone}`).then(
                         function (res) {
                             res.json().then(
                                 function (json) {
