@@ -83,17 +83,19 @@
                                 <img v-bind:src="lesson.image" alt="lesson image" class="card-img-top">
                                 <div class="card-body">
                                     <!-- lesson description -->
-                                    <h1 class="card-title">{{lesson.subject}}</h1>
+                                    <h1 class="card-title">{{lesson.topic}}</h1>
                                     <h1>{{lesson.location}}</h1>
                                     <h1>£{{lesson.price}}</h1>
                                     <h1>{{lesson.spaces}} spaces</h1>
                                     <!-- space information  countdown -->
-                                    <span class="spaces-left" v-if="lesson.spaces === 0">All
-                                        out!</span>
-                                    <span class="spaces-left" v-else-if="lesson.spaces - cartCount(lesson._id) < 5">Only
-                                        {{lesson.spaces}} spaces
-                                        left !</span>
-                                    <span class="spaces-left" v-else>Buy now!</span>
+                                    <div class="spaces-left">
+                                        <span v-if="lesson.spaces === 0">All
+                                            out!</span>
+                                        <span v-else-if="lesson.spaces - cartCount(lesson._id) < 5">Only
+                                            {{lesson.spaces}} spaces
+                                            left !</span>
+                                        <span v-else>Buy now!</span>
+                                    </div>
 
                                     <!-- add to cart button -->
                                     <button class="add-to-cart btn btn-primary" v-on:click="addToCart(lesson)"
@@ -116,16 +118,30 @@
                 <div class="container" style="padding:0px;">
                     <div class="row">
                         <!-- cart items -->
-                        <div class="col-lg-12">
+                        <div id="cart-items" class="col-lg-12">
                             <!-- cart container -->
                             <div class="container">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <h1>Cart</h1>
-                                    </div>
-                                </div>
-                                <div class="cart container">
-                                    <div class="row">
+                                <div class="cart">
+                                    <div class="cart-item-row row">
+                                        <div class="cart-header col-sm-12">
+                                            <h1>Cart</h1>
+                                        </div>
+                                        <div class=" cart-item-descriptions col-sm-12">
+                                            <div class="row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                                    <p>Lesson</p>
+                                                </div>
+                                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                                    <p>Location</p>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                                    <p>Quantity</p>
+                                                </div>
+                                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                                    <p>Total</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <!-- cart items list -->
                                         <div v-for="(cartItem,index) in updatedCart"
                                             class=" col-md-12 col-lg-12 col-sm-12">
@@ -135,9 +151,9 @@
                                                         <img v-bind:src="cartItem.image" alt="lesson image">
                                                     </figure>
                                                 </div>
-                                                <div class="cart-item-descriptions col-lg-2 col-md-2 col-sm-2">
-                                                    <p>{{cartItem.subject}}</p>
-                                                    <p>{{cartItem.location}}</p>
+                                                <div class="cart-item-information col-lg-2 col-md-2 col-sm-2">
+                                                    <p class="cart-item-subject">{{cartItem.topic}}</p>
+                                                    <p class="cart-item-location">{{cartItem.location}}</p>
                                                 </div>
 
                                                 <div class="cart-buttons col-lg-4 col-md-4 col-sm-4">
@@ -152,23 +168,26 @@
                                                     </button>
                                                 </div>
                                                 <div class="cart-item-total col-lg-2 col-md-2 col-sm-2">
-                                                    <div class="cart-item-details">£{{cartItem.price}}</div>
+                                                    <div class="cart-item-details">£{{updateCartItemTotal(cartItem)}}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button v-on:click="showCheckout">Checkout</button>
-
                                     </div>
-
+                                    <div id="checkout-btn" class="row checkout-btn">
+                                        <div class="col-sm-12"> <button v-on:click="showCheckout">Checkout</button>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                         <!-- checkout form -->
-                        <div v-if="checkoutBtn" class="checkout">
+                        <div id="checkout" style="display: none;">
                             <div class="checkout-page text-center">
                                 <h1>Checkout</h1>
-                                <button class="btn btn-sucess" v-on:click="seeOrders()">See your
-                                    Orders</button></button>
+                                <button class="btn see-orders" v-on:click="seeOrders()">See your
+                                    Orders</button>
                                 <!-- checkout form -->
                                 <form v-on:submit.prevent="submitOrder" style="width: 100%;">
                                     <div id="order-alert" class="alert alert-success alert-dismissible" role="alert"
@@ -192,6 +211,10 @@
                                     <button type="submit" v-if="validOrder()" class="btn btn-success">Place
                                         Order</button>
                                 </form>
+                                <div v-for="order in orders">
+                                    <p>Name:{{order.name}}</p>
+                                    <p> Spaces Ordered: {{order.spaces}}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -208,7 +231,6 @@
                 sortType: "",
                 sortBy: "",
                 showLessons: true,
-                checkoutBtn: false,
                 cartButton: "cart",
                 cart: [],
                 checkout: {
@@ -219,7 +241,7 @@
                         "": ""
                     }
                 },
-                orders: []
+                orders: [],
             },
             created: function () {
                 console.log("retrieving information from the server...");
@@ -258,6 +280,15 @@
                         this.cartButton = this.cartButton ? "Lessons" : "cart";
                     }
                 },
+                updateCartItemTotal(index) {
+                    let cartItemTotal = 0;
+                    for (let i = 0; i < this.cart.length; i++) {
+                        if (this.cart[i]._id === index._id) {
+                            cartItemTotal += index.price;
+                        }
+                    }
+                    return cartItemTotal;
+                },
                 updateCart(index) {
                     if (this.canAddToCart(index)) this.cart.push(index);
 
@@ -273,12 +304,17 @@
                     } else event.preventDefault(); // If not match, don't add to input text
                 },
                 showCheckout() {
-                    console.log(this.checkoutBtn)
-                    if (this.checkoutBtn == false) this.checkoutBtn = true;
-                    else this.checkoutBtn = false;
-                    console.log(this.checkoutBtn)
-                    // this.checkoutBtn= this.checkoutBtn ? true : false;
-                    // console.log(this.checkoutBtn)
+                    let cart = document.getElementById("cart-items");
+                    let checkout = document.getElementById("checkout");
+                    if (checkout.style = "display:none") {
+                        checkout.classList.add("checkout");
+                        cart.classList.remove("col-lg-12");
+                        cart.classList.add("col-lg-8");
+                        checkout.classList.add("col-lg-4");
+                        checkout.classList.add("col-sm-12");
+                        checkout.style = "display:block";
+                        document.getElementById("checkout-btn").style = "display:none";
+                    }
                 },
                 submitOrder() {
                     //for each lesson
