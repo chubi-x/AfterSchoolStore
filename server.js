@@ -56,7 +56,8 @@ app.post("/:collectionName", (req, res, next) => {
 // const ObjectID = require('mongodb').ObjectID;
 app.get("/:collectionName/:name/:phone", (req, res, next) => {
     req.collection.find({
-        name: (req.params.name)
+        name: (req.params.name),
+        phone: (req.params.phone)
     }).toArray((e,result)=>{
          if(e) return next(e);
          res.send(result);
