@@ -339,7 +339,7 @@
                     return this.checkout.name && this.checkout.phone
                 },
                 seeOrders() {
-                    fetch(`http://localhost:3000/orders/${app.checkout.name}`).then(
+                    fetch(`https://cw2backend.herokuapp.com/orders/${app.checkout.name}`).then(
                         function (res) {
                             res.json().then(
                                 function (json) {

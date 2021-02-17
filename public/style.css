@@ -29,6 +29,7 @@ nav button.cart-btn {
 
 nav button.cart-btn:hover {
     background-color: #527abb;
+    border-color: #527abb;
 
 }
 
@@ -189,9 +190,9 @@ section.button-group button.btn-success {
 
 /* media query */
 @media only screen and (min-width: 600px) {
-    .lessons {
-        /* padding-left: 70px; */
-    }
+    /* .lessons {
+        /* padding-left: 70px; 
+    } */
 
     .lessons .card {
         max-width: 350px;
@@ -199,7 +200,7 @@ section.button-group button.btn-success {
 }
 
 @media only screen and (min-width:578px) {
-    div.cart div.cart-row div.cart-item-descriptions.col-lg-2.col-md-2.col-sm-2 {}
+    /* div.cart div.cart-row div.cart-item-descriptions.col-lg-2.col-md-2.col-sm-2 {} */
 
 }
 
