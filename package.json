@@ -2,7 +2,7 @@
   "name": "cw2backend",
   "version": "1.0.0",
   "description": "Backend of web app that lets students and their parents purchase after school activites",
-  "main": "server.js",
+  "main": "node server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
