@@ -242,7 +242,10 @@ div.cart div.row.checkout-btn{
 div.cart div.row.checkout-btn div.col-sm-12{
     height: inherit;
 }
-
+div.cart #checkout-btn button{
+    border-radius: 5px;
+    color:#eee6e6a6 ;
+ }
 .checkout{
     display: block;
     margin-top:50px;    
@@ -256,11 +259,11 @@ div.checkout button.see-orders{
     border: 0px;
     color:#eee6e6a6 ;
 }
-#checkout button[type="submit"]{
+#checkout button[type="submit"], div.cart #checkout-btn button{
     border-color:#527abb ;
     background-color:#527abb ;
 }
-#checkout button[type="submit"]:hover{
+#checkout button[type="submit"]:hover,div.cart #checkout-btn button:hover{
     /* border-color:#527abb ; */
     background-color:#527abb85 ;
 }
