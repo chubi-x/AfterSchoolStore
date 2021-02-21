@@ -1,1 +1,1 @@
-This is the backend for the web app created in coureswork 1
+Web store that lets students and parents buy after school lessons
