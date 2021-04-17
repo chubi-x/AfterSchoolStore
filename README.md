@@ -10,4 +10,4 @@ This (fullstack) e-commerce webstore lets you sign up for after school lessons i
 * All the lesson and user information is stored in a **MongoDB** database, so be rest assured your kid won't blame the dog for his lost homework. We have receipts!
 
 
-Check it out now! https://afterschoolstore.herokuapp.com/  The longer you wait, the more braincells Junior loses!
+Check it out now @ https://afterschoolstore.herokuapp.com/  The longer you wait, the more braincells Junior loses!
