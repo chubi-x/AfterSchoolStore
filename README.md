@@ -6,7 +6,7 @@ This (fullstack) e-commerce webstore lets you sign up for after school lessons i
 
 # HOW WAS IT BUILT ? :hammer:
 * The frontend was dynamically coded using the hottest framework in town. Yup, you guessed it, **VUEJS**!
-* The number 1 superstar in the game, **NodeJS** takes care of all backend needs. using **ExpressJS** for routing and all REST API calls
+* The number 1 backend superstar in the game, **NodeJS** takes care of all backend needs, using **ExpressJS** for routing and all REST API calls
 * All the lesson and user information is stored in a **MongoDB** database, so be rest assured your kid won't blame the dog for his lost homework. We have receipts!
 
 
