@@ -249,7 +249,7 @@
             },
             created: function () {
                 console.log("retrieving information from the server...");
-                fetch("https://cw2backend.herokuapp.com/lessons").then(
+                fetch("https://afterschoolstore.herokuapp.com/lessons").then(
                     function (res) {
                         res.json().then(
                             function (json) {
@@ -353,7 +353,7 @@
 
                         });
                         //post checkout information to orders collection
-                        fetch('https://cw2backend.herokuapp.com/orders', {
+                        fetch('https://afterschoolstore.herokuapp.com/orders', {
                                 method: 'POST', // set the HTTP method as 'POST'
                                 headers: {
                                     'Content-Type': 'application/json', // set the data type as JSON
@@ -379,7 +379,7 @@
                     return this.checkout.name && this.checkout.phone
                 },
                 seeOrders() {
-                    fetch(`https://cw2backend.herokuapp.com/orders/${app.checkout.name}/${app.checkout.phone}`).then(
+                    fetch(`https://afterschoolstore.herokuapp.com/orders/${app.checkout.name}/${app.checkout.phone}`).then(
                         function (res) {
                             res.json().then(
                                 function (json) {
