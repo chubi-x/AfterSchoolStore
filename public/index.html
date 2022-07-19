@@ -7,7 +7,7 @@
     <!-- font awesome -->
     <script src="https://kit.fontawesome.com/397b00c9d6.js" crossorigin="anonymous"></script>
     <!-- vue CDN -->
-    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.4/dist/vue.js"></script>
     <!-- <script src="lessons.js"></script> -->
     <!-- google fonts link -->
     <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
@@ -213,11 +213,11 @@
                                 </form>
                                 <div style="color: white;border: 2px solid #eee6e6a6;margin-top: 20px;">
                                     <h1>Orders</h1>
-                                    <div v-for="order in orders" >
+                                    <div v-for="order in orders">
                                         <p>Name:{{order.name}}</p>
                                         <p> Spaces Ordered: {{Object.keys(order.spaces).length}}</p>
                                     </div>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -379,16 +379,18 @@
                     return this.checkout.name && this.checkout.phone
                 },
                 seeOrders() {
-                    fetch(`https://afterschoolstore.herokuapp.com/orders/${app.checkout.name}/${app.checkout.phone}`).then(
-                        function (res) {
-                            res.json().then(
-                                function (json) {
-                                    app.orders = json;
-                                    console.log(app.orders);
-                                }
-                            )
-                        }
-                    )
+                    fetch(
+                            `https://afterschoolstore.herokuapp.com/orders/${app.checkout.name}/${app.checkout.phone}`)
+                        .then(
+                            function (res) {
+                                res.json().then(
+                                    function (json) {
+                                        app.orders = json;
+                                        console.log(app.orders);
+                                    }
+                                )
+                            }
+                        )
                 }
             },
             computed: {
