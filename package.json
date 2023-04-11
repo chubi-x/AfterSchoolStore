@@ -19,6 +19,6 @@
   "homepage": "https://github.com/chubi-x/cw2backend#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mongodb": "^3.6.4"
+   "mongodb": "^5.1.0"
   }
 }
