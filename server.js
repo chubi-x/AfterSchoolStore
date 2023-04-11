@@ -1,8 +1,26 @@
 //import express
 const express = require("express");
+import { MongoClient } from 'mongodb'
 //create express instance
 const app = express();
 
+const client = new MongoClient("mongodb+srv://chubixax:yNE4gnwZq4S2l8Dp@cluster0.m3ksss7.mongodb.net")
+let db
+async function connectAndRun (): Promise<void> {
+  try {
+    await client.connect()
+    db = client.db('cst3145')
+    console.log('Connected successfully to Database')
+    const port = process.env.PORT ?? 3000
+    app.listen(port, () => {
+      console.log(`App running on port ${port}`)
+    })
+  } catch (error: any) {
+    console.error('Error Connecting to Database', error)
+    await client.close()
+  }
+}
+await connectAndRun();
 //configure express
 app.use(express.json());
 //specify where to get static files
@@ -15,16 +33,6 @@ app.use((req, res, next) => {
     next();
 });
 
-//connect to mongo client
-const MongoClient = require("mongodb").MongoClient;
-//create database instance
-let db;
-//connect to the cluster
-
-MongoClient.connect("mongodb+srv://chubixax:yNE4gnwZq4S2l8Dp@cluster0.m3ksss7.mongodb.net",(error, client) => {
-    //connect to the database
-    db = client.db("cst3145");
-});
 
 //make the collection name a parameter
 app.param("collectionName", (req, res, next, collectionName) => {
