@@ -20,7 +20,8 @@ const MongoClient = require("mongodb").MongoClient;
 //create database instance
 let db;
 //connect to the cluster
-MongoClient.connect("mongodb+srv://chubiXaX:Chubiyojo2120@cluster0.8mjq6.mongodb.net",(error, client) => {
+
+MongoClient.connect("mongodb+srv://chubixax:yNE4gnwZq4S2l8Dp@cluster0.m3ksss7.mongodb.net",(error, client) => {
     //connect to the database
     db = client.db("cst3145");
 });
